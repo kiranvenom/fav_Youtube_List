@@ -2,6 +2,7 @@ const form = document.getElementById('first-form');
 const input = document.getElementById('key-input');
 const ul = document.getElementById('item-list');
 const ClearButt = document.querySelector('.clear-button-all');
+const filter = document.querySelector('.filterInput');
 
 
 const heading = document.querySelector('h1');
@@ -39,7 +40,9 @@ addItem = (e) => {
 
 onClickRmItem = (e) => {
     if(e.target.parentElement.classList.contains('remove-item')){
-        e.target.parentElement.parentElement.remove();
+        if(confirm('Are you sure you want to remove')){
+            e.target.parentElement.parentElement.remove();
+        }
     }
     checkUi();
 };
@@ -52,13 +55,32 @@ clearAllButton = (e) => {
     checkUi();
 };
 
+filterCheck = (e) => {
+    const li = ul.querySelectorAll('li');
+    const text = e.target.value.toLowerCase();
+
+    li.forEach((lis)=>{
+        const itemName = lis.firstChild.textContent.toLocaleLowerCase();
+        if(itemName.indexOf(text) != -1) {
+            lis.style.display = 'block';
+        }else {
+            lis.style.display = 'none';
+        }
+    })
+};
+
+
+
 checkUi = () => {
     const li = ul.querySelectorAll('li');
     const clearrr = document.querySelector('.clear');
+    const filterDiv = document.querySelector('.filter');
     if(li.length === 0){
         clearrr.style.display = 'none';
+        filterDiv.style.display = 'none';
     }else {
         clearrr.style.display = 'block';
+        filterDiv.style.display = 'block';
     }
 };
 checkUi();
@@ -68,3 +90,5 @@ checkUi();
 form.addEventListener('submit', addItem);
 ul.addEventListener('click', onClickRmItem);
 ClearButt.addEventListener('click', clearAllButton);
+
+filter.addEventListener('input', filterCheck);
